@@ -51,9 +51,10 @@ The file is in JSON5 (you can just use regular JSON if you prefer, but the exten
 
         /*
          * We've added a shortcut to class-types so you can tag/describe
-         * columns at the same time of the class.
+         * columns at the same time of the class.  It is named attribute
+         * because they turn into graphql attributes on the object.
          */
-        columns: {
+        attribute: {
           /*
            * Assuming `body` is one of the columns in the 'post' table.
            */
