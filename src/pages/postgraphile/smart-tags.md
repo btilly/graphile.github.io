@@ -20,7 +20,8 @@ has stuck when referring to smart tags.
 
 You will also often see the smart comment syntax used to refer to smart tags
 in general, it's because the syntax is a little easier to write quickly -
-you'll soon learn to translate `@omit update,delete` to `omit: "update,delete"` (and vice-versa) in your head.
+you'll soon learn to translate between `@omit` and `omit: true`, or
+`@omit update,delete` and `omit: "update,delete"` in your head.
 
 ### Valid values
 
@@ -210,7 +211,7 @@ comment on function authenticate(text, text) is
 
 #### @omit
 
-To remove an entity from your API, you can use the 'omit' smart tag. If you only want to omit the entity from certain operations you can list them. For example, `@omit update` on a table would prevent the table from having an update-related functionality whilst still including queries, create and delete. `@omit update` on a column would prevent the column appearing in the `Patch` type, so it cannot be updated (but can still be created) via GraphQL.
+To remove an entity from your API, you can use the 'omit' smart tag. If you only want to omit the entity from certain operations, you can list them. For example, `@omit` on a table hides it, while `@omit update` prevents the table from having an update-related functionality whilst still including queries, create and delete. `@omit update` on a column would prevent the column appearing in the `Patch` type, so it cannot be updated (but can still be created) via GraphQL.
 
 Here's a quick-reference for the operations we currently support (you'll want to experiment with them as there wasn't space to put all the caveats in the table!):
 
@@ -232,7 +233,7 @@ Here's a quick-reference for the operations we currently support (you'll want to
 
 > **Warning:** This functionality is not intended for implementing permissions, it's for removing things from your API that you don't need. You should back these up with database permissions if needed.
 
-Multiple actions can be listed using commas (no spaces!), as in the following example which disables mutations on a table:
+Multiple actions can be listed using commas (no spaces!), and all actions by passing true.  Ss in the following example which disables mutations on one table and completely hides another:
 
 ```json5
 class: {
@@ -240,12 +241,18 @@ class: {
     tags: {
       omit: "create,update,delete"
     }
+  },
+  other_table_name: {
+    tags: {
+      omit: true
+    }
   }
 }
 ```
 
 ```sql
 comment on table table_name is E'@omit create,update,delete';
+comment on table other_table_name is E'@omit';
 ```
 
 Applies to:
